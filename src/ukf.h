@@ -4,6 +4,10 @@
 #include "Eigen/Dense"
 #include "measurement_package.h"
 
+// Add include
+#include <iostream>
+#include <fstream>
+
 class UKF {
  public:
   /**
@@ -95,6 +99,10 @@ class UKF {
 
   // Sigma point spreading parameter
   double lambda_;
+
+  // Count of Process Measurement
+  int processCnt_;
+  int processCntHalf_;
 };
 
 #endif  // UKF_H
