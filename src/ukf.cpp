@@ -23,12 +23,14 @@ UKF::UKF() {
   P_.fill(0.);
 
   // Process noise standard deviation longitudinal acceleration in m/s^2
-  std_a_ = 1.5;
+  std_a_ = 1.0;
+  //std_a_ = 1.5;
   //std_a_ = 3;
   //std_a_ = 30; // 30 is too big. Should be less than 3.
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 0.5*M_PI;
+  std_yawdd_ = 0.3*M_PI;
+  //std_yawdd_ = 0.5*M_PI;
   //std_yawdd_ = 2*M_PI;
   //std_yawdd_ = 30; // 30 is too big. Should be less than 2Pi.
   
@@ -73,6 +75,8 @@ UKF::UKF() {
 
   // Initialize P_
   P_  = MatrixXd::Identity(5, 5);
+  P_(2,2) = 100;
+  P_(3,3) = 100;
 
   // Initialize weights_
   weights_ = VectorXd(2*n_aug_+1);
@@ -136,8 +140,6 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
     // done initializing, no need to predict or update
     is_initialized_ = true;
     std::cout << "0. Initialize End-----" << std::endl;
-
-    return;
   }
   else {
     double delta_t;
@@ -176,11 +178,11 @@ void UKF::Prediction(double delta_t) {
 
   /* 1. Generating Sigma Points with augmentation*/
   // create augmented mean vector
-  VectorXd x_aug = VectorXd(7);
+  VectorXd x_aug = VectorXd(n_aug_);
   x_aug.fill(0.);
 
   // create augmented state covariance
-  MatrixXd P_aug = MatrixXd(7, 7);
+  MatrixXd P_aug = MatrixXd(n_aug_, n_aug_);
   P_aug.fill(0.);
 
   // create sigma point matrix
@@ -276,8 +278,8 @@ void UKF::Prediction(double delta_t) {
   //MatrixXd P = MatrixXd(n_x, n_x); 
 
   // Initial x_, P_ each time
-  VectorXd final_x = VectorXd::Zero(5);
-  MatrixXd final_P = MatrixXd::Zero(5, 5);
+  VectorXd final_x = VectorXd::Zero(n_x_);
+  MatrixXd final_P = MatrixXd::Zero(n_x_, n_x_);
   //x_.fill(0.);
   //P_.fill(0.);
  
@@ -289,7 +291,7 @@ void UKF::Prediction(double delta_t) {
 
   // predict state covariance matrix
   for (int i = 0; i < 2*n_aug_+1; i++){
-      VectorXd x_diff = Xsig_pred_.col(i) - x_;
+      VectorXd x_diff = Xsig_pred_.col(i) - final_x;
       while (x_diff(3) > M_PI) x_diff(3) -= 2.0*M_PI;
       while (x_diff(3) < -M_PI) x_diff(3) += 2.0*M_PI;
       final_P += weights_(i) * x_diff*x_diff.transpose();
