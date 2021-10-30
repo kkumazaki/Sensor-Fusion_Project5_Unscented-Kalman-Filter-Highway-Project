@@ -27,17 +27,27 @@ int main(int argc, char** argv)
 
 	double egoVelocity = 25;
 
+	// Debug file
+    string filename = "../result/result.txt";
+    ofstream outputfile(filename);
+
 	while (frame_count < (frame_per_sec*sec_interval))
 	{
 		viewer->removeAllPointClouds();
 		viewer->removeAllShapes();
 
+		VectorXd rmse;
+
 		//stepHighway(egoVelocity,time_us, frame_per_sec, viewer);
-		highway.stepHighway(egoVelocity,time_us, frame_per_sec, viewer);
+		highway.stepHighway(egoVelocity,time_us, frame_per_sec, viewer, rmse);
+		outputfile << rmse << std::endl;
+		//highway.stepHighway(egoVelocity,time_us, frame_per_sec, viewer);
 		viewer->spinOnce(1000/frame_per_sec);
 		frame_count++;
 		time_us = 1000000*frame_count/frame_per_sec;
 		
 	}
+	// Close file
+    outputfile.close();
 
 }

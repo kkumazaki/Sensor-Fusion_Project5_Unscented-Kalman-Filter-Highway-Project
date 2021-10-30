@@ -4,6 +4,7 @@
 #include "render/render.h"
 #include "sensors/lidar.h"
 #include "tools.h"
+#include <fstream>
 
 class Highway
 {
@@ -106,7 +107,8 @@ public:
 		car3.render(viewer);
 	}
 	
-	void stepHighway(double egoVelocity, long long timestamp, int frame_per_sec, pcl::visualization::PCLVisualizer::Ptr& viewer)
+	void stepHighway(double egoVelocity, long long timestamp, int frame_per_sec, pcl::visualization::PCLVisualizer::Ptr& viewer, VectorXd &rmse)
+	//void stepHighway(double egoVelocity, long long timestamp, int frame_per_sec, pcl::visualization::PCLVisualizer::Ptr& viewer)
 	{
 
 		if(visualize_pcd)
@@ -145,7 +147,8 @@ public:
 			}
 		}
 		viewer->addText("Accuracy - RMSE:", 30, 300, 20, 1, 1, 1, "rmse");
-		VectorXd rmse = tools.CalculateRMSE(tools.estimations, tools.ground_truth);
+		rmse = tools.CalculateRMSE(tools.estimations, tools.ground_truth);
+		//VectorXd rmse = tools.CalculateRMSE(tools.estimations, tools.ground_truth);
 		viewer->addText(" X: "+std::to_string(rmse[0]), 30, 275, 20, 1, 1, 1, "rmse_x");
 		viewer->addText(" Y: "+std::to_string(rmse[1]), 30, 250, 20, 1, 1, 1, "rmse_y");
 		viewer->addText("Vx: "	+std::to_string(rmse[2]), 30, 225, 20, 1, 1, 1, "rmse_vx");
