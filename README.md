@@ -4,7 +4,7 @@ Sensor Fusion UKF Highway Project Starter Code
 <img src="media/ukf_highway_tracked.gif" width="700" height="400" />
 
 ## Goal
-In this project I implemented an Unscented Kalman Filter to estimate the state of multiple cars on a highway using noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower that the tolerance outlined in the project rubric as below:
+In this project I implemented an Unscented Kalman Filter to estimate the state of multiple cars on a highway using noisy lidar and radar measurements. Passing the project requires obtaining RMSE values that are lower that the tolerance outlined in the project rubric as below:  
 
 - px, py, vx, vy output coordinates must have an   RMSE <= [0.30, 0.16, 0.95, 0.70] after running for longer than 1 second.
 
@@ -21,33 +21,33 @@ In this project I implemented an Unscented Kalman Filter to estimate the state o
   * visualize_pcd: show gray point clouds
   * projectTime, projectSteps: show green spheres that predict the vehicle paths  
 
-- ukf.h, ukf.cpp: main project codes that I modified by reffering to the Lesson codes.
+- ukf.h, ukf.cpp: main project codes that I modified by referring to the Lesson codes.
 
 
 ### (2)Points
 - I modified process noise standard deviations.  
-  Default values: 30 were too large, so I modified them to the moderate values.
+  Default values: 30 were too large, so I modified them to the moderate values.  
   std_a_ = 1.0;  
-  std_yawdd_ = 0.3*M_PI;
+  std_yawdd_ = 0.3*M_PI;  
 - I set the initial state vector = 0.
-- At first I set the initial covariance matrix = identity matrix, but the initial error of velocity was large and overshooted the target RMSE. So I changed the covariance of v and phi as following:  
+- At first I set the initial covariance matrix = identity matrix, but the initial error of velocity was large and overshoot the target RMSE. So I changed the covariance of v and phi as following:  
   P_(2,2) = 100;  
   P_(3,3) = 100;  
 
 ## Result
 ### (1)Sensor fusion of Lidar and Radar
 The following is the resulting RMSE of Sensor fusion of Lidar and Radar.
-It achieved the target goal of project rubric.
+It achieved the target goal of project rubric.  
 <img src="result/result_Lidar_Radar.png" />
 
 ### (2)Only Lidar
-The following is the resultig RMSE of only Lidar measurement.
-It didn't achieve the target goal of project rubric. The accuracy of position(x and y) look fine, but the accuracy of velocity(vx and vy) are not good.
+The following is the resulting RMSE of only Lidar measurement.
+It didn't achieve the target goal of project rubric. The accuracy of position(x and y) look fine, but the accuracy of velocity(vx and vy) are not good.  
 <img src="result/result_Lidar.png" />
 
 ### (3)Only Radar
-The following is the resultig RMSE of only Radar measurement.
-It didn't achieve the target goal of project rubric. The accuracy of both position and velocity are not good.
+The following is the resulting RMSE of only Radar measurement.
+It didn't achieve the target goal of project rubric. The accuracy of both position and velocity are not good.  
 <img src="result/result_Radar.png" />
 
 
